@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ashley Taylor - To Live & Thrive Digital Business Card</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary-color: #7BA17A;
+      --secondary-color: #C9A08A;
+      --accent-color: #F6F4EF;
+      --deep-color: #2E2E2E;
+
+      --n8n-chat-primary-color: #7BA17A;
+      --n8n-chat-background-color: #1f2a22;
+      --n8n-chat-text-color: #ffffff;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #101812;
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+      gap: 20px;
+    }
+
+    .n8n-chat-widget .n8n-chat-button {
+      display: none !important;
+    }
+
+    .color-panel {
+      z-index: 20;
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      padding: 10px 20px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      margin-bottom: 10px;
+    }
+
+    .color-panel label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.75);
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .color-panel input[type="color"] {
+      -webkit-appearance: none;
+      border: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      cursor: pointer;
+      background: none;
+    }
+
+    .color-panel input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+    .color-panel input[type="color"]::-webkit-color-swatch {
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 50%;
+    }
+
+    .bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; }
+
+    .bg-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: .58;
+      animation: drift 12s ease-in-out infinite alternate;
+    }
+
+    .bg-orb:nth-child(1) {
+      width: 520px; height: 520px;
+      background: radial-gradient(circle, var(--primary-color), #4E6E57);
+      top: -120px; left: -100px; animation-delay: 0s;
+    }
+
+    .bg-orb:nth-child(2) {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, var(--secondary-color), #8a6f5e);
+      bottom: -80px; right: -80px; animation-delay: -4s;
+    }
+
+    .bg-orb:nth-child(3) {
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, #E7E1D6, var(--primary-color));
+      top: 50%; left: 60%; animation-delay: -8s;
+    }
+
+    @keyframes drift {
+      from { transform: translate(0, 0) scale(1); }
+      to { transform: translate(40px, 30px) scale(1.12); }
+    }
+
+    .grid-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      background-image:
+        linear-gradient(rgba(246, 244, 239, .06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(246, 244, 239, .06) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+    }
+
+    canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .scene {
+      perspective: 1000px;
+      z-index: 10;
+      position: relative;
+    }
+
+    .card {
+      width: 460px;
+      height: 270px;
+      border-radius: 24px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform .08s linear;
+      cursor: pointer;
+    }
+
+    .card-inner {
+      position: absolute;
+      inset: 0;
+      border-radius: 24px;
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, .18) 0%,
+        rgba(255, 255, 255, .07) 60%,
+        rgba(123, 161, 122, .12) 100%
+      );
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, .24);
+      box-shadow:
+        0 8px 32px rgba(0, 0, 0, .45),
+        0 0 0 .5px rgba(255, 255, 255, .12) inset,
+        0 1px 0 rgba(255, 255, 255, .35) inset;
+      overflow: hidden;
+      padding: 28px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-inner::before {
+      content: '';
+      position: absolute;
+      top: -60%;
+      left: -60%;
+      width: 60%;
+      height: 160%;
+      background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, .16) 50%, transparent 60%);
+      transform: skewX(-15deg);
+      animation: shine 6s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes shine {
+      0% { left: -60%; opacity: 0; }
+      10% { opacity: 1; }
+      40% { left: 130%; opacity: 0; }
+      100% { left: 130%; opacity: 0; }
+    }
+
+    .card-inner::after {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 24px;
+      background: conic-gradient(
+        from var(--angle, 0deg),
+        var(--primary-color),
+        var(--secondary-color),
+        #E7E1D6,
+        #4E6E57,
+        var(--primary-color)
+      );
+      z-index: -1;
+      opacity: 0;
+      transition: opacity .4s;
+      animation: spin 4s linear infinite;
+    }
+
+    .card:hover .card-inner::after { opacity: 1; }
+
+    @keyframes spin { to { --angle: 360deg; } }
+
+    @property --angle {
+      syntax: '<angle>';
+      initial-value: 0deg;
+      inherits: false;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .logo-mark {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: 17px;
+      color: #fff;
+      letter-spacing: -1px;
+      box-shadow: 0 0 18px rgba(123, 161, 122, .45), 0 0 8px rgba(201, 160, 138, .35);
+      flex-shrink: 0;
+    }
+
+    .card-tag {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 3px;
+      color: rgba(246, 244, 239, .7);
+      text-transform: uppercase;
+      text-align: right;
+      line-height: 1.6;
+    }
+
+    .card-tag span {
+      display: block;
+      color: #F6F4EF;
+    }
+
+    .name-block { margin-top: 4px; }
+
+    .name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: .5px;
+      text-shadow: 0 0 20px rgba(123, 161, 122, .55);
+    }
+
+    .title {
+      font-size: 11px;
+      font-weight: 400;
+      color: rgba(246, 244, 239, .75);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(246, 244, 239, .35), transparent);
+      margin: 0 -34px;
+    }
+
+    .card-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .contact-column {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 11px;
+      color: rgba(246, 244, 239, .9);
+      letter-spacing: .4px;
+    }
+
+    .contact-item a {
+      color: inherit;
+      text-decoration: none;
+      transition: color .2s;
+    }
+
+    .contact-item a:hover { color: #E7E1D6; }
+
+    .contact-item .icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 5px;
+      background: rgba(123, 161, 122, .18);
+      border: 1px solid rgba(123, 161, 122, .35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .contact-item .icon svg {
+      width: 10px;
+      height: 10px;
+      fill: #E7E1D6;
+    }
+
+    .card-bottom-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+    }
+
+    .nfc-chip {
+      width: 38px;
+      height: 28px;
+      border-radius: 6px;
+      border: 1.5px solid rgba(255, 255, 255, .22);
+      background: linear-gradient(135deg, rgba(255, 255, 255, .12), rgba(255, 255, 255, .04));
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 3px;
+      padding: 4px;
+      box-shadow: 0 0 10px rgba(201, 160, 138, .25);
+    }
+
+    .nfc-cell {
+      border-radius: 2px;
+      background: rgba(201, 160, 138, .45);
+    }
+
+    .voice-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 14px 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, .28);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: #fff;
+      background: linear-gradient(
+        135deg,
+        rgba(123, 161, 122, .55) 0%,
+        rgba(201, 160, 138, .38) 100%
+      );
+      box-shadow:
+        0 0 14px rgba(123, 161, 122, .55),
+        0 0 28px rgba(201, 160, 138, .22),
+        0 2px 8px rgba(0, 0, 0, .35);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      z-index: 2;
+      white-space: nowrap;
+      transition: box-shadow .25s ease, border-color .25s ease, transform .15s ease;
+    }
+
+    .voice-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        105deg,
+        transparent 30%,
+        rgba(255, 255, 255, .18) 50%,
+        transparent 70%
+      );
+      transform: translateX(-100%) skewX(-15deg);
+      transition: transform .5s ease;
+      pointer-events: none;
+    }
+
+    .voice-btn:hover::before {
+      transform: translateX(200%) skewX(-15deg);
+    }
+
+    .voice-btn:hover {
+      box-shadow:
+        0 0 22px rgba(123, 161, 122, .8),
+        0 0 42px rgba(201, 160, 138, .38),
+        0 4px 14px rgba(0, 0, 0, .45);
+      border-color: rgba(255, 255, 255, .48);
+      transform: translateY(-1px) scale(1.03);
+    }
+
+    .voice-btn:active {
+      transform: translateY(0) scale(.98);
+    }
+
+    .voice-btn-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .16);
+      border: 1px solid rgba(255, 255, 255, .32);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 0 8px rgba(123, 161, 122, .65);
+    }
+
+    .voice-btn-icon svg {
+      width: 11px;
+      height: 11px;
+      fill: #fff;
+    }
+
+    .voice-btn-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #86efac;
+      box-shadow: 0 0 6px #86efac, 0 0 12px #86efac;
+      animation: pulse-dot 1.6s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.5); opacity: .6; }
+    }
+
+    .n8n-chat-widget {
+      font-family: 'Inter', sans-serif !important;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        overflow: auto;
+        padding: 20px;
+      }
+
+      .color-panel {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .card {
+        width: 340px;
+        height: auto;
+        min-height: 280px;
+      }
+
+      .card-inner {
+        padding: 20px 22px;
+      }
+
+      .name {
+        font-size: 18px;
+      }
+
+      .card-bottom {
+        gap: 16px;
+      }
+
+      .voice-btn {
+        font-size: 8px;
+        padding-right: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="bg">
+    <div class="bg-orb"></div>
+    <div class="bg-orb"></div>
+    <div class="bg-orb"></div>
+  </div>
+
+  <div class="grid-overlay"></div>
+  <canvas id="particles"></canvas>
+
+  <div class="color-panel">
+    <label>Primary: <input type="color" id="primaryPicker" value="#7BA17A"></label>
+    <label>Secondary: <input type="color" id="secondaryPicker" value="#C9A08A"></label>
+  </div>
+
+  <div class="scene">
+    <div class="card" id="card">
+      <div class="card-inner">
+
+        <div class="card-top">
+          <div class="logo-mark">TL</div>
+          <div class="card-tag">
+            Est. 2019
+            <span>TO LIVE & THRIVE</span>
+            Holistic Wellness
+          </div>
+        </div>
+
+        <div class="name-block">
+          <div class="name">Ashley Taylor</div>
+          <div class="title">Owner-Operator</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="card-bottom">
+
+          <div class="contact-column">
+
+            <div class="contact-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                </svg>
+              </div>
+              <a href="mailto:toliveandthrive@gmail.com">toliveandthrive@gmail.com</a>
+            </div>
+
+            <div class="contact-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41C17.93 5.77 20 8.65 20 12c0 2.08-.81 3.98-2.1 5.39z"/>
+                </svg>
+              </div>
+              <a href="https://toliveandthrive.com/" target="_blank">toliveandthrive.com</a>
+            </div>
+
+            <div class="contact-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.61 21 3 13.39 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z"/>
+                </svg>
+              </div>
+              <a href="tel:+14243330456">(424) 333-0456</a>
+            </div>
+
+          </div>
+
+          <div class="card-bottom-right">
+
+            <div class="nfc-chip">
+              <div class="nfc-cell"></div>
+              <div class="nfc-cell"></div>
+              <div class="nfc-cell"></div>
+              <div class="nfc-cell"></div>
+            </div>
+
+            <button class="voice-btn" id="voiceBtn" type="button">
+              <span class="voice-btn-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
+                </svg>
+              </span>
+              Ask My AI Wellness Guide
+              <span class="voice-btn-dot"></span>
+            </button>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('primaryPicker').addEventListener('input', e => {
+      document.documentElement.style.setProperty('--primary-color', e.target.value);
+      document.documentElement.style.setProperty('--n8n-chat-primary-color', e.target.value);
+    });
+
+    document.getElementById('secondaryPicker').addEventListener('input', e => {
+      document.documentElement.style.setProperty('--secondary-color', e.target.value);
+    });
+
+    const card = document.getElementById('card');
+    const scene = card.parentElement;
+
+    scene.addEventListener('mousemove', e => {
+      const r = scene.getBoundingClientRect();
+      const dx = (e.clientX - (r.left + r.width / 2)) / (r.width / 2);
+      const dy = (e.clientY - (r.top + r.height / 2)) / (r.height / 2);
+      card.style.transform = `rotateX(${-dy * 12}deg) rotateY(${dx * 18}deg) scale(1.04)`;
+    });
+
+    scene.addEventListener('mouseleave', () => {
+      card.style.transition = 'transform .6s cubic-bezier(.23,1,.32,1)';
+      card.style.transform = 'rotateX(0) rotateY(0) scale(1)';
+      setTimeout(() => card.style.transition = 'transform .08s linear', 620);
+    });
+
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [];
+
+    function resize() {
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+
+    resize();
+    window.addEventListener('resize', resize);
+
+    class Particle {
+      constructor() { this.reset(true); }
+
+      reset(init) {
+        this.x = Math.random() * W;
+        this.y = init ? Math.random() * H : H + 10;
+        this.r = Math.random() * 1.6 + .4;
+        this.vx = (Math.random() - .5) * .3;
+        this.vy = -(Math.random() * .5 + .2);
+        this.alpha = Math.random() * .7 + .3;
+        this.life = 0;
+        this.maxLife = 180 + Math.random() * 180;
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.life++;
+        if (this.life > this.maxLife || this.y < -10) this.reset(false);
+      }
+
+      draw() {
+        const fade = Math.min(this.life / 30, 1) * Math.min((this.maxLife - this.life) / 30, 1);
+        const style = getComputedStyle(document.documentElement);
+        ctx.globalAlpha = this.alpha * fade;
+        ctx.fillStyle = this.life % 2 === 0
+          ? style.getPropertyValue('--primary-color').trim()
+          : style.getPropertyValue('--secondary-color').trim();
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < 90; i++) particles.push(new Particle());
+
+    (function loop() {
+      ctx.clearRect(0, 0, W, H);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(loop);
+    })();
+  </script>
+
+  <script type="module">
+    import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+
+    createChat({
+      webhookUrl: 'https://toliveandthrive.app.n8n.cloud/webhook/f821ef8d-70b5-4ff9-98c1-6c10a8b7476b/chat',
+      initialMessages: [
+        "Hi! I'm Ashley Taylor's AI Wellness Assistant. I can answer questions about To Live & Thrive, herbal wellness products, cleanses, supplements, and help you find the right solutions for your wellness journey. How can I help you today?"
+      ],
+      i18n: {
+        en: {
+          title: 'To Live & Thrive AI',
+          subtitle: 'Your Herbal Wellness Assistant',
+          footer: '',
+          getStarted: 'Start Chatting',
+          inputPlaceholder: 'Type your question here...'
+        }
+      }
+    });
+
+    document.getElementById('voiceBtn').addEventListener('click', function(e) {
+      e.stopPropagation();
+
+      const internalN8nLauncher = document.querySelector('.n8n-chat-widget .n8n-chat-button, .n8n-chat-button');
+
+      if (internalN8nLauncher) {
+        internalN8nLauncher.click();
+      } else {
+        const directWidgetFrame = document.querySelector('.n8n-chat-widget');
+        if (directWidgetFrame) directWidgetFrame.classList.toggle('n8n-chat-widget-closed');
+      }
+    });
+  </script>
+
+</body>
+</html>
